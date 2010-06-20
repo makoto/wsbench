@@ -7,13 +7,13 @@ EventMachine.run {
         puts "WebSocket connection open"
 
         # publish message to the client
-        ws.send "Hello Client"
+        # ws.send "Hello Client"
       }
 
       ws.onclose { puts "Connection closed" }
       ws.onmessage { |msg|
         puts "Recieved message: #{msg}"
-        ws.send "Pong: #{msg}"
+        ws.send msg
       }
   end
 }
