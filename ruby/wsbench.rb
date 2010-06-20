@@ -51,12 +51,11 @@ EM.run {
       end_time = Time.now.to_f
       result = Connection.new(:connection_id => i, :start_time => start_time, :end_time => end_time)
       results << result
-      # ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * 1000 }))
+      # ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * 100000 }))
       ws.send(JSON.generate({:connection_id => i, :start_time => end_time}))
     }
     ws.stream{|msg|
       reply = JSON.parse(msg)
-      # p reply
       result = Connection.new(
         :connection_id => reply["connection_id"], 
         :start_time => reply["start_time"],
@@ -64,14 +63,17 @@ EM.run {
       )
       results2 << result
     }
-    
   end
-  EventMachine::add_timer(20) {
+
+  EventMachine::add_periodic_timer(1) {
+  if results2.size == connections
     print "#{results.size}: "
     print "Connect: #{show_result(results)} :"
-    print "Message: #{show_result(results2)}\n"
+    print "Message: #{show_result(results2)}"
 
     EventMachine::stop
+  end
   }
 }
-
+end_time = Time.now.to_f
+print ": Total #{sprintf("%.3f", end_time - begin_time)}"
