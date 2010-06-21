@@ -67,13 +67,21 @@ EM.run {
 
   EventMachine::add_periodic_timer(1) {
   if results2.size == connections
-    print "#{results.size}: "
-    print "Connect: #{show_result(results)} :"
+    print "SUCCESS (#{results2.size}/#{connections}), "
+    print "Connect: #{show_result(results)} ,"
     print "Message: #{show_result(results2)}"
 
     EventMachine::stop
   end
   }
+  
+  EventMachine::add_timer(30) {
+    print "TIMEOUT (#{results2.size} / #{connections}), "
+    print "Connect: #{show_result(results)} ,"
+    print "Message: #{show_result(results2)}"
+
+    EventMachine::stop
+  }
 }
 end_time = Time.now.to_f
-print ": Total #{sprintf("%.3f", end_time - begin_time)}"
+print ", Total #{sprintf("%.3f", end_time - begin_time)}"
