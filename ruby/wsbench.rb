@@ -41,7 +41,16 @@ uri.path = "/"
 results = []
 results2 = []
 
+desired_descriptors = 8192
+file_descriptors = EventMachine.set_descriptor_table_size(desired_descriptors)
+if file_descriptors == desired_descriptors
+  p "Epoll configured with #{file_descriptors} file descriptors"
+else
+  p "Epoll configured with only #{file_descriptors} file descriptors"
+end
+
 begin_time = Time.now.to_f
+EM.epoll
 EM.run {
   connections.times do |i|
     
