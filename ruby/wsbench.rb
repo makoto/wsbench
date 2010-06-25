@@ -37,7 +37,7 @@ end
 
 uri = URI.parse('ws://localhost')
 uri.port = 8080
-uri.path = "/"
+uri.path = "/echo"
 results = []
 results2 = []
 
