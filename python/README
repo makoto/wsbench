@@ -1,0 +1,4 @@
+# This is from pywebsocket
+# The usage 
+./standalone.py  -H localhost -p 8080 --allow-draft75 -w .
+./echo_client.py -s localhost -p 8080  --draft75
