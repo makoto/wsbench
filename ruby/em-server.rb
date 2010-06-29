@@ -8,11 +8,13 @@ if file_descriptors == desired_descriptors
 else
   p "Epoll configured with only #{file_descriptors} file descriptors"
 end
+port = (ARGV[0] && ARGV[0].to_i) || 8080
+p port
 
 EventMachine.epoll
 EventMachine.run {
 
-  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080) do |ws|
+  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port) do |ws|
       ws.onopen {
         puts "WebSocket connection open"
 
