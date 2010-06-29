@@ -13,6 +13,7 @@ require 'uri'
 require 'json'
 
 connections =  (ARGV[0] && ARGV[0].to_i) || 250
+port =  (ARGV[1] && ARGV[1].to_i) || 8080
 
 class Connection
   attr_accessor :start_time, :end_time
@@ -35,8 +36,9 @@ def show_result(array)
 end
 
 
+p port
 uri = URI.parse('ws://localhost')
-uri.port = 8080
+uri.port = port
 uri.path = "/echo"
 results = []
 results2 = []
@@ -84,7 +86,7 @@ EM.run {
   end
   }
   
-  EventMachine::add_timer(30) {
+  EventMachine::add_timer(120) {
     print "TIMEOUT (#{results2.size} / #{connections}), "
     print "Connect: #{show_result(results)} ,"
     print "Message: #{show_result(results2)}"
