@@ -12,9 +12,22 @@ require 'em-http'
 require 'uri'
 require 'json'
 
-connections =  (ARGV[0] && ARGV[0].to_i) || 250
-port =  (ARGV[1] && ARGV[1].to_i) || 8080
+require 'optparse'
 
+OptionParser.new do |o|
+  o.banner = "Usage: wsbench.rb [options] [ws[s]://]hostname[:port]/path \n eg: wsbench.rb -c 10 ws://localhost:8080/echo"
+  o.on('-c connection ', help = "default connection is 10") {|s|$connections = s.to_i || 10}
+  o.on('-t timeout'){|s| $timeout = s.to_f || 30}
+  o.on('-h') { puts o; exit }
+  o.parse!
+end
+
+p ARGV
+
+uri = URI.parse(ARGV.first)
+
+connections = $connections
+timeout = $timeout
 class Connection
   attr_accessor :start_time, :end_time
   def initialize(options)
@@ -35,11 +48,6 @@ def show_result(array)
   "sum #{sprintf("%.3f", sum)}, max #{sprintf("%.3f",max)}, min #{sprintf("%.3f",min)}, avg #{sprintf("%.3f", avg)}"
 end
 
-
-p port
-uri = URI.parse('ws://localhost')
-uri.port = port
-uri.path = "/echo"
 results = []
 results2 = []
 
@@ -86,7 +94,7 @@ EM.run {
   end
   }
   
-  EventMachine::add_timer(120) {
+  EventMachine::add_timer(timeout) {
     print "TIMEOUT (#{results2.size} / #{connections}), "
     print "Connect: #{show_result(results)} ,"
     print "Message: #{show_result(results2)}"

@@ -1,2 +1,2 @@
 ruby em-server.rb
-wsbench.rb
+ruby wsbench.rb -c 10 ws://localhost:8080/echo
