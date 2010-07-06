@@ -11,23 +11,36 @@ require 'eventmachine'
 require 'em-http'
 require 'uri'
 require 'json'
-
+require 'ostruct'
 require 'optparse'
+
+options = OpenStruct.new
+options.connections = 10
+options.timeout = 30
+options.message = 1
+options.descriptors = 8192
 
 OptionParser.new do |o|
   o.banner = "Usage: wsbench.rb [options] [ws[s]://]hostname[:port]/path \n eg: wsbench.rb -c 10 ws://localhost:8080/echo"
-  o.on('-c connection ', help = "default connection is 10") {|s|$connections = s.to_i || 10}
-  o.on('-t timeout'){|s| $timeout = s.to_f || 30}
+  o.on('-c connection ', 
+    help = "number of concurrent connections (default: #{options.connections})") {|s|options.connections = s.to_i}
+  o.on('-t timeout', help = "timeout (default: #{options.timeout})"){|s| options.timeout = s.to_f}
+  o.on('-d maxdescrtors', help = "max number of descriptors (default: #{options.descriptors})"){|s| options.descriptors = s.to_i}
+  o.on('-m mesage', help ="message size(bytes), (default: #{options.message})"){|s| options.message = s.to_f}
   o.on('-h') { puts o; exit }
   o.parse!
 end
 
 p ARGV
+p options
 
 uri = URI.parse(ARGV.first)
 
-connections = $connections
-timeout = $timeout
+connections = options.connections
+timeout = options.timeout
+message = options.message
+descriptors = options.descriptors
+
 class Connection
   attr_accessor :start_time, :end_time
   def initialize(options)
@@ -51,7 +64,7 @@ end
 results = []
 results2 = []
 
-desired_descriptors = 8192
+desired_descriptors = descriptors
 file_descriptors = EventMachine.set_descriptor_table_size(desired_descriptors)
 if file_descriptors == desired_descriptors
   p "Epoll configured with #{file_descriptors} file descriptors"
@@ -70,8 +83,7 @@ EM.run {
       end_time = Time.now.to_f
       result = Connection.new(:connection_id => i, :start_time => start_time, :end_time => end_time)
       results << result
-      # ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * 100000 }))
-      ws.send(JSON.generate({:connection_id => i, :start_time => end_time}))
+      ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))
     }
     ws.stream{|msg|
       reply = JSON.parse(msg)
