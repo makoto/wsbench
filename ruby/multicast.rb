@@ -1,29 +1,45 @@
 require 'rubygems'
 require 'em-websocket'
-require 'json'
-
-#
-# broadcast all ruby related tweets to all connected users!
-#
+# Epoll will initially be configured to 1024 descriptors on ubuntu
+desired_descriptors = 8192
+file_descriptors = EventMachine.set_descriptor_table_size(desired_descriptors)
+if file_descriptors == desired_descriptors
+  p "Epoll configured with #{file_descriptors} file descriptors"
+else
+  p "Epoll configured with only #{file_descriptors} file descriptors"
+end
+port = (ARGV[0] && ARGV[0].to_i) || 8080
+p port
 
 EventMachine.run {
-  @channel = EM::Channel.new
+  @channels = {}
 
-  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => 8080, :debug => true) do |ws|
-
+  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port, :debug => true) do |ws|
+    @channel = nil
+    @sid = nil
     ws.onopen {
-      sid = @channel.subscribe { |msg| ws.send msg }
-      @channel.push "#{sid} connected!"
-
-      ws.onmessage { |msg|
-        @channel.push "<#{sid}>: #{msg}"
-      }
-
-      ws.onclose {
-        @channel.unsubscribe(sid)
-      }
-
+      p ws.request["Path"]
+      channel_name = ws.request["Path"]
+      p @channels[channel_name]
+      @channel = if @channels[channel_name]
+        @channels[channel_name]
+      else
+        @channels[channel_name] = EM::Channel.new
+      end
+      p "subscribing to #{channel_name}"
+      @sid = @channel.subscribe { |msg| ws.send msg }
+    }    
+    
+    ws.onmessage { |msg|
+      p "onmessage"
+      @channel.push "<#{@sid}>: #{msg}"
     }
+
+    ws.onclose {
+      p "onclose"
+      @channel.unsubscribe(@sid)
+    }
+    
   end
 
   puts "Server started"
