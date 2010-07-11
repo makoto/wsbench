@@ -94,8 +94,6 @@ EM.run {
        }
       ws.stream{|msg|
         reply = JSON.parse(msg)
-        p reply["connection_id"]
-        
         result = Connection.new(
           :connection_id => reply["connection_id"], 
           :start_time => reply["start_time"],
