@@ -1,0 +1,39 @@
+## Echo
+# ruby echo.rb 5555
+# ruby wsbench.rb  ws://localhost:5555/echo -c (1000 - 20000) -T echo -t 300 -d 21000
+SUCCESS (1000/1000), Connect: sum 124.271, max 0.334, min 0.002, avg 0.124 ,Message: sum 68.920, max 0.245, min 0.002, avg 0.069, Total 3.498 
+SUCCESS (2000/2000), Connect: sum 222.535, max 3.033, min 0.003, avg 0.111 ,Message: sum 96.897, max 0.197, min 0.001, avg 0.048, Total 7.804 
+SUCCESS (3000/3000), Connect: sum 815.190, max 3.352, min 0.003, avg 0.272 ,Message: sum 289.171, max 0.462, min 0.002, avg 0.096, Total 16.376 
+SUCCESS (4000/4000), Connect: sum 835.088, max 8.998, min 0.002, avg 0.209 ,Message: sum 248.304, max 0.479, min 0.000, avg 0.062, Total 20.724 
+SUCCESS (5000/5000), Connect: sum 893.356, max 3.351, min 0.002, avg 0.179 ,Message: sum 479.482, max 0.463, min 0.000, avg 0.096, Total 21.754 
+SUCCESS (6000/6000), Connect: sum 1346.465, max 3.471, min 0.002, avg 0.224 ,Message: sum 495.725, max 0.418, min 0.000, avg 0.083, Total 27.121 
+SUCCESS (7000/7000), Connect: sum 1632.577, max 9.557, min 0.002, avg 0.233 ,Message: sum 568.728, max 0.436, min 0.002, avg 0.081, Total 29.963 
+SUCCESS (8000/8000), Connect: sum 1708.607, max 9.073, min 0.002, avg 0.214 ,Message: sum 692.427, max 0.686, min 0.001, avg 0.087, Total 35.279 
+SUCCESS (9000/9000), Connect: sum 1838.800, max 9.006, min 0.002, avg 0.204 ,Message: sum 719.130, max 0.877, min 0.000, avg 0.080, Total 44.108 
+SUCCESS (10000/10000), Connect: sum 1617.500, max 3.468, min 0.002, avg 0.162 ,Message: sum 659.844, max 0.783, min 0.000, avg 0.066, Total 48.090 
+SUCCESS (11000/11000), Connect: sum 2033.752, max 3.420, min 0.002, avg 0.185 ,Message: sum 851.323, max 0.713, min 0.000, avg 0.077, Total 52.649 
+SUCCESS (12000/12000), Connect: sum 3465.445, max 9.596, min 0.002, avg 0.289 ,Message: sum 1207.048, max 0.846, min 0.001, avg 0.101, Total 63.098 
+SUCCESS (13000/13000), Connect: sum 2515.145, max 3.340, min 0.002, avg 0.193 ,Message: sum 963.722, max 0.735, min 0.001, avg 0.074, Total 59.955 
+SUCCESS (14000/14000), Connect: sum 2855.581, max 9.002, min 0.002, avg 0.204 ,Message: sum 1086.535, max 0.611, min 0.002, avg 0.078, Total 62.508 
+SUCCESS (15000/15000), Connect: sum 3327.314, max 9.115, min 0.003, avg 0.222 ,Message: sum 1383.790, max 0.823, min 0.000, avg 0.092, Total 71.394 
+SUCCESS (16000/16000), Connect: sum 3474.856, max 9.181, min 0.002, avg 0.217 ,Message: sum 1571.015, max 0.797, min 0.002, avg 0.098, Total 72.489 
+SUCCESS (17000/17000), Connect: sum 3712.536, max 3.567, min 0.002, avg 0.218 ,Message: sum 1515.893, max 0.902, min 0.000, avg 0.089, Total 79.382 
+SUCCESS (18000/18000), Connect: sum 4061.328, max 3.752, min 0.002, avg 0.226 ,Message: sum 1776.706, max 0.929, min 0.000, avg 0.099, Total 83.834 
+SUCCESS (19000/19000), Connect: sum 4225.114, max 4.006, min 0.002, avg 0.222 ,Message: sum 1705.172, max 0.807, min 0.000, avg 0.090, Total 90.453 
+SUCCESS (20000/20000), Connect: sum 5158.769, max 9.224, min 0.002, avg 0.258 ,Message: sum 2111.021, max 0.874, min 0.001, avg 0.106, Total 97.797 
+
+## Broadcast (failed to broadcast more than around 2500)
+SUCCESS (1001/1000), Connect: sum 145.387, max 2.999, min 0.002, avg 0.145 ,Message: sum 100.568, max 0.149, min 0.009, avg 0.100, Total 6.492 
+SUCCESS (2001/2000), Connect: sum 182.185, max 0.282, min 0.002, avg 0.091 ,Message: sum 598.388, max 0.432, min 0.038, avg 0.299, Total 7.795 
+TIMEOUT (2940 / 3000), Connect: sum 635.618, max 3.200, min 0.002, avg 0.212 ,Message: sum 1521.130, max 0.762, min 0.208, avg 0.517, Total 100.580 
+TIMEOUT (2545 / 4000), Connect: sum 668.811, max 3.133, min 0.002, avg 0.167 ,Message: sum 1635.964, max 0.793, min 0.384, avg 0.643, Total 60.672 
+
+
+## Observations.
+Opening and keeping connections can be easily scalable as long as the connections are not created in one shot. However, broadcasting to all clients in one shot hits limit when sending more than 2000 connections.
+
+## Next step.
+- Try separating client and server.
+- Try multicast.
+- Batch up broadcasting into 2000 chunks
+- Replace EM.add_periodic_timer with EM.next_tick
