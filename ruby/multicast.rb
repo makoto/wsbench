@@ -11,28 +11,29 @@ end
 port = (ARGV[0] && ARGV[0].to_i) || 8080
 p port
 
+class MyChannel
+  attr_reader :ws
+  def initialize(opts)
+    @ws = opts[:ws]
+  end
+end
+
 EventMachine.run {
-  @channels = {}
+  @channels = []
 
   EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port, :debug => true) do |ws|
     @channel = nil
     @sid = nil
     ws.onopen {
-      # p ws.request["Path"]
-      channel_name = ws.request["Path"]
-      # p @channels[channel_name]
-      @channel = if @channels[channel_name]
-        @channels[channel_name]
-      else
-        @channels[channel_name] = EM::Channel.new
-      end
-      @sid = @channel.subscribe { |msg| ws.send msg }
-      p "subscribed #{@sid} to #{channel_name}"
+      @channels << MyChannel.new(:ws => ws)
+      p "CHANNEL: #{@channels.size}"
     }    
     
     ws.onmessage { |msg|
       p "onmessage"
-      @channel.push msg
+      @channels.each do |c|
+        c.ws.send msg
+      end
     }
 
     ws.onclose {
