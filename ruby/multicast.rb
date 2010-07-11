@@ -40,8 +40,8 @@ EventMachine.run {
     }
 
     ws.onclose {
-      p "onclose: #{@channel} #{@sid}"
-      @channel.unsubscribe(@sid)
+      # p "onclose: #{@channel} #{@sid}"
+      # @channel.unsubscribe(@sid)
     }
     
   end
