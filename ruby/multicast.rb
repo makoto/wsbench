@@ -26,9 +26,8 @@ EventMachine.run {
       else
         @channels[channel_name] = EM::Channel.new
       end
-      p "subscribing to #{channel_name}"
-      # @sid = @channel.subscribe { |msg| ws.send msg }
-      @sid = @channel.subscribe { |msg| p [:got, msg] }
+      @sid = @channel.subscribe { |msg| ws.send msg }
+      p "subscribed #{@sid} to #{channel_name}"
     }    
     
     ws.onmessage { |msg|
@@ -37,10 +36,10 @@ EventMachine.run {
     }
 
     ws.onclose {
-      p "onclose"
-      if @channel
-        @channel.unsubscribe(@sid)
-      end
+      p "onclose: #{@channel} #{@sid}"
+      # if @channel
+      #   @channel.unsubscribe(@sid)
+      # end
     }
     
   end
