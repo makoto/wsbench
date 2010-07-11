@@ -27,7 +27,8 @@ EventMachine.run {
         @channels[channel_name] = EM::Channel.new
       end
       p "subscribing to #{channel_name}"
-      @sid = @channel.subscribe { |msg| ws.send msg }
+      # @sid = @channel.subscribe { |msg| ws.send msg }
+      @sid = @channel.subscribe { |msg| p [:got, msg] }
     }    
     
     ws.onmessage { |msg|
