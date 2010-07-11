@@ -36,6 +36,7 @@ EventMachine.run {
       p "onmessage: #{@channels.size} channels"
       @channels.each do |c|
         p "cid: #{c.channel_id}"
+        sleep 0.001
         c.ws.send msg
       end
       ws.send msg
