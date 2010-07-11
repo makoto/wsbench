@@ -28,23 +28,33 @@ EventMachine.run {
   EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port) do |ws|
     ws.onopen {
       c = c + 1
-      @channels << MyChannel.new(:ws => ws, :channel_id => c)
+      p "channel: #{c}"
+      # @channels << MyChannel.new(:ws => ws, :channel_id => c)
+      p 1
+      @channel = EM::Channel.new
+      p 2
+      @channels << @channel
+      p 3
+      @sid = @channel.subscribe { |msg| ws.send msg }
       p "CHANNEL: #{@channels.size}"
     }    
     
     ws.onmessage { |msg|
       p "onmessage: #{@channels.size} channels"
-      @channels.each do |c|
-        p "cid: #{c.channel_id}"
-        sleep 0.001
-        c.ws.send msg
-      end
-      ws.send msg
-      
+      # @channels.each do |c|
+      #   p "cid: #{c.channel_id}"
+      #   c.ws.send msg
+      # end
+      # ws.send msg
+      # p @channel.channel_id
+      @channels.each {|c|
+        c.push msg
+      }
+      # @channel.push msg      
     }
 
     ws.onclose {
-      # p "onclose: #{@channel} #{@sid}"
+      p "onclose: #{@channel} #{@sid}"
       # @channel.unsubscribe(@sid)
     }
     
