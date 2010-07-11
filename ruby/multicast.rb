@@ -37,7 +37,9 @@ EventMachine.run {
 
     ws.onclose {
       p "onclose"
-      @channel.unsubscribe(@sid)
+      if @channel
+        @channel.unsubscribe(@sid)
+      end
     }
     
   end
