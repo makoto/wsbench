@@ -12,27 +12,30 @@ port = (ARGV[0] && ARGV[0].to_i) || 8080
 p port
 
 class MyChannel
-  attr_reader :ws
+  attr_reader :ws, :channel_id
   def initialize(opts)
     @ws = opts[:ws]
+    @channel_id = opts[:channel_id]
   end
 end
 
 @channels = []
 @channel = nil
 @sid = nil
-
+c = 0
 EventMachine.epoll
 EventMachine.run {
   EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port) do |ws|
     ws.onopen {
-      @channels << MyChannel.new(:ws => ws)
+      c = c + 1
+      @channels << MyChannel.new(:ws => ws, :channel_id => c)
       p "CHANNEL: #{@channels.size}"
     }    
     
     ws.onmessage { |msg|
       p "onmessage: #{@channels.size} channels"
       @channels.each do |c|
+        p "cid: #{c.channel_id}"
         c.ws.send msg
       end
       ws.send msg
