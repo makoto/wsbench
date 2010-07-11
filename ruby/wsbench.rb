@@ -80,7 +80,7 @@ begin_time = Time.now.to_f
 EM.epoll
 EM.run {
   i = 0
-  EventMachine::add_periodic_timer(0.0001) do
+  EventMachine::add_periodic_timer(0.001) do
     if i < connections 
       start_time = Time.now.to_f
       ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => 10)
@@ -94,6 +94,8 @@ EM.run {
        }
       ws.stream{|msg|
         reply = JSON.parse(msg)
+        p reply["connection_id"]
+        
         result = Connection.new(
           :connection_id => reply["connection_id"], 
           :start_time => reply["start_time"],
