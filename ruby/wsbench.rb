@@ -80,7 +80,7 @@ begin_time = Time.now.to_f
 EM.epoll
 EM.run {
   i = 0
-  EventMachine::add_periodic_timer(0.001) do
+  EventMachine::add_periodic_timer(0.0001) do
     if i < connections 
       start_time = Time.now.to_f
       ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => 10)
@@ -119,7 +119,7 @@ EM.run {
   EventMachine::add_periodic_timer(1) {
     p "#{results.size} connections, #{results2.size} messages"
     
-  if results2.size == connections
+  if results2.size >= connections
     print "SUCCESS (#{results2.size}/#{connections}), "
     print "Connect: #{show_result(results)} ,"
     print "Message: #{show_result(results2)}"
