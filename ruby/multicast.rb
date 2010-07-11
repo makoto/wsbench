@@ -32,7 +32,7 @@ EventMachine.run {
     
     ws.onmessage { |msg|
       p "onmessage"
-      @channel.push "<#{@sid}>: #{msg}"
+      @channel.push msg
     }
 
     ws.onclose {

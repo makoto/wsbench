@@ -19,14 +19,17 @@ options.connections = 10
 options.timeout = 30
 options.message = 1
 options.descriptors = 8192
+options.test_type = "echo" # or "broadcast" 
 
 OptionParser.new do |o|
   o.banner = "Usage: wsbench.rb [options] [ws[s]://]hostname[:port]/path \n eg: wsbench.rb -c 10 ws://localhost:8080/echo"
   o.on('-c connection ', 
     help = "number of concurrent connections (default: #{options.connections})") {|s|options.connections = s.to_i}
   o.on('-t timeout', help = "timeout (default: #{options.timeout})"){|s| options.timeout = s.to_f}
-  o.on('-d maxdescrtors', help = "max number of descriptors (default: #{options.descriptors})"){|s| options.descriptors = s.to_i}
-  o.on('-m mesage', help ="message size(bytes), (default: #{options.message})"){|s| options.message = s.to_f}
+  o.on('-d maxdescriptors', help = "max number of descriptors (default: #{options.descriptors})"){|s| options.descriptors = s.to_i}
+  o.on('-m message', help ="message size(bytes), (default: #{options.message})"){|s| options.message = s.to_f}
+  o.on('-T type', help ="type echo|broadcast (default: #{options.test_type})"){|s| options.test_type = s}
+  # echo, multicast, broadcast
   o.on('-h') { puts o; exit }
   o.parse!
 end
@@ -40,6 +43,7 @@ connections = options.connections
 timeout = options.timeout
 message = options.message
 descriptors = options.descriptors
+test_type = options.test_type
 
 class Connection
   attr_accessor :start_time, :end_time
@@ -76,14 +80,23 @@ begin_time = Time.now.to_f
 EM.epoll
 EM.run {
   connections.times do |i|
-    
     start_time = Time.now.to_f
     ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => 10)
     ws.callback{
       end_time = Time.now.to_f
       result = Connection.new(:connection_id => i, :start_time => start_time, :end_time => end_time)
       results << result
-      ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))
+      if test_type == "echo"
+        p "echo"
+        ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))
+      elsif test_type == "broadcast"
+        if connections == i + 1
+          p "broadcast"
+          ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))  
+        end
+      else  
+        raise "test type missing"
+      end
     }
     ws.stream{|msg|
       reply = JSON.parse(msg)
@@ -115,4 +128,4 @@ EM.run {
   }
 }
 end_time = Time.now.to_f
-print ", Total #{sprintf("%.3f", end_time - begin_time)}"
+print ", Total #{sprintf("%.3f", end_time - begin_time)} \n"
