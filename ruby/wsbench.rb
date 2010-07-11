@@ -18,7 +18,6 @@ options = OpenStruct.new
 options.connections = 10
 options.timeout = 30
 options.message = 1
-options.descriptors = 8192 * 2
 options.test_type = "echo" # or "broadcast" 
 
 OptionParser.new do |o|
@@ -26,7 +25,6 @@ OptionParser.new do |o|
   o.on('-c connection ', 
     help = "number of concurrent connections (default: #{options.connections})") {|s|options.connections = s.to_i}
   o.on('-t timeout', help = "timeout (default: #{options.timeout})"){|s| options.timeout = s.to_f}
-  o.on('-d maxdescriptors', help = "max number of descriptors (default: #{options.descriptors})"){|s| options.descriptors = s.to_i}
   o.on('-m message', help ="message size(bytes), (default: #{options.message})"){|s| options.message = s.to_f}
   o.on('-T type', help ="type echo|broadcast (default: #{options.test_type})"){|s| options.test_type = s}
   # echo, multicast, broadcast
@@ -42,7 +40,7 @@ uri = URI.parse(ARGV.first)
 connections = options.connections
 timeout = options.timeout
 message = options.message
-descriptors = options.descriptors
+descriptors = connections * 2
 test_type = options.test_type
 
 class Connection
