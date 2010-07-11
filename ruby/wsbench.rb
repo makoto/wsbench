@@ -42,6 +42,7 @@ timeout = options.timeout
 message = options.message
 descriptors = connections * 2
 test_type = options.test_type
+broadcasted == false
 
 class Connection
   attr_accessor :start_time, :end_time, :ws
@@ -105,12 +106,16 @@ EM.run {
   end
 
   EventMachine::add_periodic_timer(1) {
+    if results.size == connections && test_type == "broadcast" && broadcasted == false
+      p "broadcasting"
+      end_time = Time.now.to_f
+      results.last.ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))  
+      broadcasted = true
+    end  
+  }
+
+  EventMachine::add_periodic_timer(1) {
     p "#{results.size} connections, #{results2.size} messages"
-    end_time = Time.now.to_f
-  if results.size == connections && test_type == "broadcast" 
-    p "broadcasting"
-    results.last.ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))  
-  end  
     
   if results2.size == connections
     print "SUCCESS (#{results2.size}/#{connections}), "
