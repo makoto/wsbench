@@ -42,7 +42,7 @@ timeout = options.timeout
 message = options.message
 descriptors = connections * 2
 test_type = options.test_type
-broadcasted == false
+broadcasted = false
 
 class Connection
   attr_accessor :start_time, :end_time, :ws
