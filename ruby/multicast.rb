@@ -18,9 +18,9 @@ EventMachine.run {
     @channel = nil
     @sid = nil
     ws.onopen {
-      p ws.request["Path"]
+      # p ws.request["Path"]
       channel_name = ws.request["Path"]
-      p @channels[channel_name]
+      # p @channels[channel_name]
       @channel = if @channels[channel_name]
         @channels[channel_name]
       else

@@ -109,7 +109,6 @@ EM.run {
     end_time = Time.now.to_f
   if results.size == connections && test_type == "broadcast" 
     p "broadcasting"
-    require 'pp'
     results.last.ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))  
   end  
     
