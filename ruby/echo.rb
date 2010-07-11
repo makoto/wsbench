@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'em-websocket'
 # Epoll will initially be configured to 1024 descriptors on ubuntu
-desired_descriptors = 8192
+desired_descriptors = 8192 * 2
 file_descriptors = EventMachine.set_descriptor_table_size(desired_descriptors)
 if file_descriptors == desired_descriptors
   p "Epoll configured with #{file_descriptors} file descriptors"

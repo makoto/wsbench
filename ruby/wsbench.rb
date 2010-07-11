@@ -18,7 +18,7 @@ options = OpenStruct.new
 options.connections = 10
 options.timeout = 30
 options.message = 1
-options.descriptors = 8192
+options.descriptors = 8192 * 2
 options.test_type = "echo" # or "broadcast" 
 
 OptionParser.new do |o|
