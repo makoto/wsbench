@@ -18,29 +18,30 @@ class MyChannel
   end
 end
 
-EventMachine.run {
-  @channels = []
+@channels = []
+@channel = nil
+@sid = nil
 
-  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port, :debug => true) do |ws|
-    @channel = nil
-    @sid = nil
+EventMachine.epoll
+EventMachine.run {
+  EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port) do |ws|
     ws.onopen {
       @channels << MyChannel.new(:ws => ws)
       p "CHANNEL: #{@channels.size}"
     }    
     
     ws.onmessage { |msg|
-      p "onmessage"
+      p "onmessage: #{@channels.size} channels"
       @channels.each do |c|
         c.ws.send msg
       end
+      ws.send msg
+      
     }
 
     ws.onclose {
       p "onclose: #{@channel} #{@sid}"
-      # if @channel
-      #   @channel.unsubscribe(@sid)
-      # end
+      @channel.unsubscribe(@sid)
     }
     
   end
