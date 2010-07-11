@@ -46,10 +46,11 @@ descriptors = options.descriptors
 test_type = options.test_type
 
 class Connection
-  attr_accessor :start_time, :end_time
+  attr_accessor :start_time, :end_time, :ws
   def initialize(options)
     @start_time = options[:start_time]
     @end_time = options[:end_time]
+    @ws = options[:ws]
   end
   def time_taken
     @end_time - @start_time
@@ -79,37 +80,41 @@ end
 begin_time = Time.now.to_f
 EM.epoll
 EM.run {
-  connections.times do |i|
-    start_time = Time.now.to_f
-    ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => 10)
-    ws.callback{
-      end_time = Time.now.to_f
-      result = Connection.new(:connection_id => i, :start_time => start_time, :end_time => end_time)
-      results << result
-      if test_type == "echo"
-        p "echo"
-        ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))
-      elsif test_type == "broadcast"
-        if connections == i + 1
-          p "broadcast"
-          ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))  
-        end
-      else  
-        raise "test type missing"
-      end
-    }
-    ws.stream{|msg|
-      reply = JSON.parse(msg)
-      result = Connection.new(
-        :connection_id => reply["connection_id"], 
-        :start_time => reply["start_time"],
-        :end_time => Time.now.to_f
-      )
-      results2 << result
-    }
+  i = 0
+  EventMachine::add_periodic_timer(0.0001) do
+    if i < connections 
+      start_time = Time.now.to_f
+      ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => 10)
+      ws.callback(){
+        end_time = Time.now.to_f
+        result = Connection.new(:connection_id => i, :start_time => start_time, :end_time => end_time, :ws => ws)
+        results << result
+        if test_type == "echo"
+           ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))
+         end
+       }
+      ws.stream{|msg|
+        reply = JSON.parse(msg)
+        result = Connection.new(
+          :connection_id => reply["connection_id"], 
+          :start_time => reply["start_time"],
+          :end_time => Time.now.to_f
+        )
+        results2 << result
+      }
+      i = i + 1
+    end
   end
 
   EventMachine::add_periodic_timer(1) {
+    p "#{results.size} connections, #{results2.size} messages"
+    end_time = Time.now.to_f
+  if results.size == connections && test_type == "broadcast" 
+    p "broadcasting"
+    require 'pp'
+    results.last.ws.send(JSON.generate({:connection_id => i, :start_time => end_time, :data => "a" * message }))  
+  end  
+    
   if results2.size == connections
     print "SUCCESS (#{results2.size}/#{connections}), "
     print "Connect: #{show_result(results)} ,"
