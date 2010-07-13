@@ -1,4 +1,4 @@
-## Echo
+## Echo (em-websocket)
 # ruby echo.rb 5555
 # ruby wsbench.rb  ws://localhost:5555/echo -c (1000 - 20000) -T echo -t 300 -d 21000
 SUCCESS (1000/1000), Connect: sum 124.271, max 0.334, min 0.002, avg 0.124 ,Message: sum 68.920, max 0.245, min 0.002, avg 0.069, Total 3.498 
@@ -22,7 +22,7 @@ SUCCESS (18000/18000), Connect: sum 4061.328, max 3.752, min 0.002, avg 0.226 ,M
 SUCCESS (19000/19000), Connect: sum 4225.114, max 4.006, min 0.002, avg 0.222 ,Message: sum 1705.172, max 0.807, min 0.000, avg 0.090, Total 90.453 
 SUCCESS (20000/20000), Connect: sum 5158.769, max 9.224, min 0.002, avg 0.258 ,Message: sum 2111.021, max 0.874, min 0.001, avg 0.106, Total 97.797 
 
-## Broadcast (failed to broadcast more than around 2500)
+## Broadcast (em-websocket)(failed to broadcast more than around 2500)
 SUCCESS (1001/1000), Connect: sum 145.387, max 2.999, min 0.002, avg 0.145 ,Message: sum 100.568, max 0.149, min 0.009, avg 0.100, Total 6.492 
 SUCCESS (2001/2000), Connect: sum 182.185, max 0.282, min 0.002, avg 0.091 ,Message: sum 598.388, max 0.432, min 0.038, avg 0.299, Total 7.795 
 TIMEOUT (2940 / 3000), Connect: sum 635.618, max 3.200, min 0.002, avg 0.212 ,Message: sum 1521.130, max 0.762, min 0.208, avg 0.517, Total 100.580 

@@ -1,0 +1,22 @@
+## Tried rev-websocekt version
+# rev-echo.rb 5555
+# ruby wsbench.rb  ws://localhost:5555/ -c [1000-20000] -T echo
+
+SUCCESS (1000/1000), Connect: sum 37.310, max 0.158, min 0.002, avg 0.037 ,Message: sum 22.857, max 0.115, min 0.001, avg 0.023, Total 3.353 
+SUCCESS (2000/2000), Connect: sum 94.580, max 0.279, min 0.002, avg 0.047 ,Message: sum 73.185, max 0.231, min 0.001, avg 0.037, Total 6.692 
+SUCCESS (3000/3000), Connect: sum 196.910, max 0.283, min 0.002, avg 0.066 ,Message: sum 94.448, max 0.276, min 0.001, avg 0.031, Total 10.245 
+SUCCESS (4000/4000), Connect: sum 408.097, max 3.186, min 0.002, avg 0.102 ,Message: sum 213.628, max 0.286, min 0.000, avg 0.053, Total 15.796 
+SUCCESS (5000/5000), Connect: sum 1362.520, max 3.966, min 0.002, avg 0.273 ,Message: sum 430.181, max 0.789, min 0.000, avg 0.086, Total 26.173 
+SUCCESS (6000/6000), Connect: sum 1299.952, max 9.595, min 0.002, avg 0.217 ,Message: sum 439.479, max 0.628, min 0.000, avg 0.073, Total 24.553 
+SUCCESS (7000/7000), Connect: sum 1437.913, max 3.532, min 0.002, avg 0.205 ,Message: sum 448.534, max 0.779, min 0.000, avg 0.064, Total 30.219 
+SUCCESS (10000/10000), Connect: sum 2689.291, max 3.689, min 0.002, avg 0.269 ,Message: sum 918.706, max 1.181, min 0.000, avg 0.092, Total 44.671 
+SUCCESS (20000/20000), Connect: sum 6886.523, max 3.680, min 0.002, avg 0.344 ,Message: sum 2312.307, max 1.032, min 0.000, avg 0.116, Total 108.438 
+
+# rev-broadcast.rb 5555
+# ruby wsbench.rb  ws://localhost:5555/ -c [1000-4000] -T broadcast
+
+SUCCESS (1001/1000), Connect: sum 338.507, max 3.021, min 0.002, avg 0.339 ,Message: sum 219.588, max 0.323, min 0.104, avg 0.219, Total 6.445 
+SUCCESS (2000/2000), Connect: sum 130.050, max 0.362, min 0.002, avg 0.065 ,Message: sum 1041.763, max 0.692, min 0.181, avg 0.521, Total 7.813 
+SUCCESS (3000/3000), Connect: sum 127.087, max 0.263, min 0.001, avg 0.042 ,Message: sum 2039.731, max 0.882, min 0.377, avg 0.680, Total 9.029 
+TIMEOUT (3987 / 4000), Connect: sum 199.378, max 0.270, min 0.002, avg 0.050 ,Message: sum 4308.124, max 1.462, min 0.663, avg 1.081, Total 30.645 
+
