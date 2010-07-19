@@ -11,11 +11,11 @@ import (
 )
 
 func sum(a []int64) int64 { // returns an int
-    var s int64 = 0
-    for i := 0; i < len(a); i++ {
-        s += a[i]
-    }
-    return s
+  var s int64 = 0
+  for i := 0; i < len(a); i++ {
+    s += a[i]
+  }
+  return s
 }
 
 type Result struct {
@@ -26,7 +26,7 @@ type WSBench struct {
   connections int
   target      string
   results     []Result
-  stats       map[string] int64
+  stats       map[string]int64
 }
 
 func (w *WSBench) Run() {
@@ -64,5 +64,5 @@ func (w *WSBench) Run() {
   for i := range w.results {
     times[i] = w.results[i].time
   }
-  w.stats = map[string] int64{"sum":sum(times)}
+  w.stats = map[string]int64{"sum": sum(times)}
 }

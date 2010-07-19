@@ -77,4 +77,3 @@ func TestStatShouldHaveSum(t *testing.T) {
     t.Errorf("Stats should have sum", wsClients.stats["sum"], 0)
   }
 }
-
