@@ -29,11 +29,10 @@ type WSBench struct {
   stats       map[string]int64
 }
 
-func (w *WSBench) Run() {
-  w.results = make([]Result, w.connections)
+var ch = make(chan Result)
+// ch1 := make(chan int)
 
-  msg := []byte("hello, world!")
-
+func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.connections; i++ {
     start := time.Nanoseconds()
     ws, err := websocket.Dial("ws://localhost:12345/echo", "", "http://localhost/")
@@ -58,11 +57,33 @@ func (w *WSBench) Run() {
     ws.Close()
     delta := time.Nanoseconds() - start
     // Adding Dummy result for now.
-    w.results[i] = Result{time: delta}
+    ch <- Result{time: delta}
   }
+  close(ch)
+}
+
+
+func (w *WSBench) Run() {
+  w.results = make([]Result, w.connections)
+  msg := []byte("hello, world!")
+
+  go do_test(w, msg)
+
+  for i := 0; i < w.connections; i++ {
+    m := <-ch
+    fmt.Printf("i: %+v m: %+v", i, m)
+    w.results[i] = m
+    if closed(ch) {
+      fmt.Println("Finished 2")
+      break
+    }
+  }
+
   times := make([]int64, w.connections)
   for i := range w.results {
+    fmt.Printf("i: %v time: %v", i, w.results[i].time)
     times[i] = w.results[i].time
   }
+  fmt.Printf("TIMES: %v", times)
   w.stats = map[string]int64{"sum": sum(times)}
 }
