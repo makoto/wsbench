@@ -27,10 +27,12 @@ type WSBench struct {
   target      string
   results     []Result
   stats       map[string]int64
+  ch          chan Result
 }
 
-var ch = make(chan Result)
 // ch1 := make(chan int)
+// var ch = make(chan Result)
+
 
 func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.connections; i++ {
@@ -57,9 +59,9 @@ func do_test(w *WSBench, msg []byte) {
     ws.Close()
     delta := time.Nanoseconds() - start
     // Adding Dummy result for now.
-    ch <- Result{time: delta}
+    w.ch <- Result{time: delta}
   }
-  close(ch)
+  close(w.ch)
 }
 
 
@@ -70,20 +72,20 @@ func (w *WSBench) Run() {
   go do_test(w, msg)
 
   for i := 0; i < w.connections; i++ {
-    m := <-ch
+    m := <-w.ch
     fmt.Printf("i: %+v m: %+v", i, m)
     w.results[i] = m
-    if closed(ch) {
-      fmt.Println("Finished 2")
+    if closed(w.ch) {
+      fmt.Println("Finished 2\n")
       break
     }
   }
 
   times := make([]int64, w.connections)
   for i := range w.results {
-    fmt.Printf("i: %v time: %v", i, w.results[i].time)
+    fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
     times[i] = w.results[i].time
   }
-  fmt.Printf("TIMES: %v", times)
+  fmt.Printf("TIMES: %v \n", times)
   w.stats = map[string]int64{"sum": sum(times)}
 }

@@ -59,23 +59,27 @@ func TestSetClientConnections(t *testing.T) {
 
 // NOTE: Looks I can do only one channel?
 
-// func TestRunCreatesMultipleConnections(t *testing.T) {
-//   once.Do(startServer)
-//   wsClients := &WSBench{connections: 2}
-//   wsClients.Run()
-//   fmt.Printf("A: %v ", wsClients.results)
-//   if len(wsClients.results) != 2 {
-//     t.Errorf("Running WSBench w 2 connections should return 2 results ", wsClients.results, 2)
-//   }
-// }
+func TestRunCreatesMultipleConnections(t *testing.T) {
+  var ch = make(chan Result)
+
+  once.Do(startServer)
+  wsClients := &WSBench{connections: 2, ch: ch}
+  wsClients.Run()
+  fmt.Printf("A: %v ", wsClients.results)
+  if len(wsClients.results) != 2 {
+    t.Errorf("Running WSBench w 2 connections should return 2 results ", wsClients.results, 2)
+  }
+}
 
 func TestStatShouldHaveSum(t *testing.T) {
+  var ch = make(chan Result)
+
   once.Do(startServer)
-  wsClients := &WSBench{connections: 2}
-  wsClients.Run()
-  fmt.Printf("B: %v ", wsClients.results)
-  fmt.Printf("C: %v ", wsClients.stats["sum"])
-  if wsClients.stats["sum"] <= 0 {
-    t.Errorf("Stats should have sum", wsClients.stats["sum"], 0)
+  wsClients2 := &WSBench{connections: 2, ch: ch}
+  wsClients2.Run()
+  fmt.Printf("B: %v ", wsClients2.results)
+  fmt.Printf("C: %v ", wsClients2.stats["sum"])
+  if wsClients2.stats["sum"] <= 0 {
+    t.Errorf("Stats should have sum", wsClients2.stats["sum"], 0)
   }
 }
