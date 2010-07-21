@@ -57,8 +57,6 @@ func TestSetClientConnections(t *testing.T) {
 
 }
 
-// NOTE: Looks I can do only one channel?
-
 func TestRunCreatesMultipleConnections(t *testing.T) {
   var ch = make(chan Result)
 
@@ -71,15 +69,32 @@ func TestRunCreatesMultipleConnections(t *testing.T) {
   }
 }
 
-func TestStatShouldHaveSum(t *testing.T) {
+func TestStatShouldHaveStat(t *testing.T) {
   var ch = make(chan Result)
 
   once.Do(startServer)
-  wsClients2 := &WSBench{connections: 2, ch: ch}
-  wsClients2.Run()
-  fmt.Printf("B: %v ", wsClients2.results)
-  fmt.Printf("C: %v ", wsClients2.stats["sum"])
-  if wsClients2.stats["sum"] <= 0 {
-    t.Errorf("Stats should have sum", wsClients2.stats["sum"], 0)
+  wsClients := &WSBench{connections: 3, ch: ch}
+  wsClients.Run()
+  fmt.Printf("B: %v ", wsClients.results)
+  fmt.Printf("C: %v ", wsClients.stats)
+  if wsClients.stats["sum"] <= 0 {
+    t.Errorf("Stats should have sum", wsClients.stats["sum"], 0)
   }
+
+  if wsClients.stats["count"] <= 0 {
+    t.Errorf("Stats should have count", wsClients.stats["count"], 0)
+  }
+
+  if wsClients.stats["avg"] <= 0 {
+    t.Errorf("Stats should have avg", wsClients.stats["avg"], 0)
+  }
+
+  if wsClients.stats["max"] <= 0 {
+    t.Errorf("Stats should have max", wsClients.stats["max"], 0)
+  }
+
+  if wsClients.stats["min"] <= 0 {
+    t.Errorf("Stats should have min", wsClients.stats["min"], 0)
+  }
+
 }

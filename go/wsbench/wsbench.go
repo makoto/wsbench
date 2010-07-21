@@ -8,12 +8,33 @@ import (
   "fmt"
   "time"
   "websocket"
+  "strconv"
 )
 
 func sum(a []int64) int64 { // returns an int
   var s int64 = 0
   for i := 0; i < len(a); i++ {
     s += a[i]
+  }
+  return s
+}
+
+func max(a []int64) int64 { // returns an int
+  var s int64 = a[0]
+  for i := 1; i < len(a); i++ {
+    if a[i] >= s {
+      s = a[i]
+    }
+  }
+  return s
+}
+
+func min(a []int64) int64 { // returns an int
+  var s int64 = a[0]
+  for i := 1; i < len(a); i++ {
+    if a[i] <= s {
+      s = a[i]
+    }
   }
   return s
 }
@@ -86,6 +107,15 @@ func (w *WSBench) Run() {
     fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
     times[i] = w.results[i].time
   }
-  fmt.Printf("TIMES: %v \n", times)
-  w.stats = map[string]int64{"sum": sum(times)}
+  lenS := strconv.Itoa(len(times))
+  len64, _ := strconv.Btoi64(lenS, 10)
+
+  var avg int64 = sum(times) / len64
+
+  w.stats = map[string]int64{
+    "sum":   sum(times),
+    "avg":   avg,
+    "max":   max(times),
+    "min":   min(times),
+    "count": len64}
 }
