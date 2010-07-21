@@ -80,6 +80,7 @@ begin_time = Time.now.to_f
 EM.epoll
 EM.run {
   i = 0
+  c = 0
   EventMachine::add_periodic_timer(0.0001) do
     if i < connections 
       start_time = Time.now.to_f
@@ -93,13 +94,14 @@ EM.run {
          end
        }
       ws.stream{|msg|
-        p "received #{msg}" if i % 100 == 0
+        p "received #{msg}" if c % 100 == 0
         reply = JSON.parse(msg)
         result = Connection.new(
           :connection_id => reply["connection_id"], 
           :start_time => reply["start_time"],
           :end_time => Time.now.to_f
         )
+        c = c + 1
         results2 << result
       }
       i = i + 1
