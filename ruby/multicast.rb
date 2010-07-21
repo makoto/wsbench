@@ -19,8 +19,10 @@ class MyChannel
   end
 end
 
-@channels = []
-@channel = nil
+# @channels = []
+# @channel = nil
+$channel = EM::Channel.new
+
 @sid = nil
 c = 0
 EventMachine.epoll
@@ -31,30 +33,32 @@ EventMachine.run {
       p "channel: #{c}"
       # @channels << MyChannel.new(:ws => ws, :channel_id => c)
       p 1
-      @channel = EM::Channel.new
       p 2
-      @channels << @channel
+      # @channels << @channel
       p 3
-      @sid = @channel.subscribe { |msg| ws.send msg }
-      p "CHANNEL: #{@channels.size}"
+      @sid = $channel.subscribe { |msg| ws.send msg }
+      # p "CHANNEL: #{@channels.size}"
     }    
     
     ws.onmessage { |msg|
-      p "onmessage: #{@channels.size} channels"
+      # p "onmessage: #{@channels.size} channels"
+      p 'onmessage'
       # @channels.each do |c|
       #   p "cid: #{c.channel_id}"
       #   c.ws.send msg
       # end
       # ws.send msg
       # p @channel.channel_id
-      @channels.each {|c|
-        c.push msg
-      }
+      # @channels.each {|c|
+      #   c.push msg
+      # }
+      $channel.push msg
       # @channel.push msg      
     }
 
     ws.onclose {
-      p "onclose: #{@channel} #{@sid}"
+      p "onclose:"
+      # p "onclose: #{@channel} #{@sid}"
       # @channel.unsubscribe(@sid)
     }
     
