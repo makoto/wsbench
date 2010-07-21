@@ -83,7 +83,7 @@ EM.run {
   EventMachine::add_periodic_timer(0.0001) do
     if i < connections 
       start_time = Time.now.to_f
-      ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => 10)
+      ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => timeout)
       ws.callback(){
         end_time = Time.now.to_f
         result = Connection.new(:connection_id => i, :start_time => start_time, :end_time => end_time, :ws => ws)
