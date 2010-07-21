@@ -30,12 +30,9 @@ EventMachine.run {
   EventMachine::WebSocket.start(:host => "0.0.0.0", :port => port) do |ws|
     ws.onopen {
       c = c + 1
-      p "channel: #{c}"
+      p "channel: #{c}" if c % 100 == 0
       # @channels << MyChannel.new(:ws => ws, :channel_id => c)
-      p 1
-      p 2
       # @channels << @channel
-      p 3
       @sid = $channel.subscribe { |msg| ws.send msg }
       # p "CHANNEL: #{@channels.size}"
     }    
