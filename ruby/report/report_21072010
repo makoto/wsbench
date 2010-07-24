@@ -1,0 +1,23 @@
+# Fixed timeout issue
+#
+# event machine multicast.rb
+SUCCESS (1000/1000), Connect: sum 94.795, max 0.398, min 0.002, avg 0.095 ,Message: sum 65.219, max 0.120, min 0.013, avg 0.065, Total 5.394 
+SUCCESS (2000/2000), Connect: sum 151.738, max 0.367, min 0.002, avg 0.076 ,Message: sum 627.803, max 0.461, min 0.068, avg 0.314, Total 7.516 
+SUCCESS (3000/3000), Connect: sum 409.227, max 3.132, min 0.002, avg 0.136 ,Message: sum 1303.053, max 0.692, min 0.113, avg 0.434, Total 13.178 
+SUCCESS (4000/4000), Connect: sum 476.870, max 3.124, min 0.002, avg 0.119 ,Message: sum 2172.889, max 0.902, min 0.141, avg 0.543, Total 15.615 
+SUCCESS (5000/5000), Connect: sum 895.756, max 3.216, min 0.002, avg 0.179 ,Message: sum 4990.130, max 1.644, min 0.349, avg 0.998, Total 21.262 
+SUCCESS (6000/6000), Connect: sum 1030.009, max 3.633, min 0.002, avg 0.172 ,Message: sum 5864.605, max 1.621, min 0.226, avg 0.977, Total 26.110 
+SUCCESS (7000/7000), Connect: sum 1001.667, max 3.491, min 0.002, avg 0.143 ,Message: sum 7420.743, max 1.670, min 0.280, avg 1.060, Total 29.462 
+SUCCESS (7000/7000), Connect: sum 1306.914, max 3.538, min 0.002, avg 0.187 ,Message: sum 7063.298, max 1.702, min 0.243, avg 1.009, Total 28.488 
+SUCCESS (8000/8000), Connect: sum 1370.630, max 9.044, min 0.002, avg 0.171 ,Message: sum 14118.248, max 2.992, min 0.508, avg 1.765, Total 34.665 
+SUCCESS (9000/9000), Connect: sum 2188.506, max 9.277, min 0.002, avg 0.243 ,Message: sum 20991.584, max 4.051, min 0.377, avg 2.332, Total 49.585 
+SUCCESS (10000/10000), Connect: sum 2051.141, max 3.694, min 0.002, avg 0.205 ,Message: sum 22537.695, max 3.418, min 0.576, avg 2.254, Total 48.010 
+SUCCESS (11000/11000), Connect: sum 2361.110, max 9.207, min 0.002, avg 0.215 ,Message: sum 21793.925, max 3.609, min 0.414, avg 1.981, Total 50.422 
+
+SUCCESS (15000/15000), Connect: sum 3389.948, max 9.295, min 0.002, avg 0.226 ,Message: sum 144574.587, max 14.399, min 1.503, avg 9.638, Total 95.611 
+SUCCESS (20000/20000), Connect: sum 4667.958, max 9.052, min 0.002, avg 0.233 ,Message: sum 297956.017, max 24.944, min 0.813, avg 14.898, Total 149.655 
+
+# rev-broadcast.rb
+
+SUCCESS (15000/15000), Connect: sum 2450.259, max 3.676, min 0.002, avg 0.163 ,Message: sum 147134.319, max 11.577, min 7.573, avg 9.809, Total 75.019 
+SUCCESS (20000/20000), Connect: sum 3792.150, max 3.587, min 0.002, avg 0.190 ,Message: sum 642698.351, max 43.806, min 18.375, avg 32.135, Total 159.934 

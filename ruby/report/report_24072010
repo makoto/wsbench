@@ -1,0 +1,17 @@
+# Separated client and server into different machines.
+# ruby wsbench.rb  ws://target:5555/echo -c [1000-20000] -T broadcast -t 120
+# event machine multicast.rb
+
+# ruby multicast.rb 5555
+
+SUCCESS (5000/5000), Connect: sum 193.568, max 3.008, min 0.004, avg 0.039 ,Message: sum 2794.153, max 0.959, min 0.131, avg 0.559, Total 14.646 
+SUCCESS (10000/10000), Connect: sum 653.797, max 3.255, min 0.004, avg 0.065 ,Message: sum 15616.783, max 2.355, min 0.661, avg 1.562, Total 34.170 
+SUCCESS (15000/15000), Connect: sum 1342.436, max 9.128, min 0.004, avg 0.089 ,Message: sum 51494.969, max 8.314, min 0.921, avg 3.433, Total 61.529 
+SUCCESS (20000/20000), Connect: sum 2011.471, max 9.030, min 0.004, avg 0.101 ,Message: sum 218144.196, max 18.206, min 1.260, avg 10.907, Total 111.581 
+
+# ruby rev_broadcast.rb 5555
+
+SUCCESS (5000/5000), Connect: sum 103.085, max 0.263, min 0.004, avg 0.021 ,Message: sum 6743.735, max 1.856, min 0.937, avg 1.349, Total 18.667 
+SUCCESS (10000/10000), Connect: sum 264.009, max 0.525, min 0.004, avg 0.026 ,Message: sum 48112.359, max 5.646, min 3.527, avg 4.811, Total 49.589 
+SUCCESS (15000/15000), Connect: sum 512.117, max 0.554, min 0.004, avg 0.034 ,Message: sum 212435.133, max 18.688, min 7.201, avg 14.162, Total 103.178 
+SUCCESS (20000/20000), Connect: sum 971.171, max 0.860, min 0.004, avg 0.049 ,Message: sum 558664.162, max 40.945, min 13.080, avg 27.933, Total 191.656 
