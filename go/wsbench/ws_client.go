@@ -12,7 +12,7 @@ func echoServer(ws *websocket.Conn) { io.Copy(ws, ws) }
 
 func startServer() {
   http.Handle("/echo", websocket.Handler(echoServer))
-  go http.ListenAndServe(":12345", nil)
+  go http.ListenAndServe(":5555", nil)
 }
 
 func main() {

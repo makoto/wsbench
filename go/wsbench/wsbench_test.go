@@ -18,13 +18,13 @@ func echoServer(ws *websocket.Conn) { io.Copy(ws, ws) }
 
 func startServer() {
   http.Handle("/echo", websocket.Handler(echoServer))
-  go http.ListenAndServe(":12345", nil)
+  go http.ListenAndServe(":5555", nil)
 }
 
 func TestEcho(t *testing.T) {
   once.Do(startServer)
   msg := []byte("hello, world!")
-  ws, err := websocket.Dial("ws://localhost:12345/echo", "", "http://localhost/")
+  ws, err := websocket.Dial("ws://localhost:5555/echo", "", "http://localhost/")
   if err != nil {
     t.Errorf("WebSocket handshake: %v", err)
   }
@@ -47,11 +47,11 @@ func TestEcho(t *testing.T) {
 
 func TestSetClientConnections(t *testing.T) {
   once.Do(startServer)
-  wsClients := &WSBench{Connections: 2, target: "ws://localhost:12345/echo"}
+  wsClients := &WSBench{Connections: 2, target: "ws://localhost:5555/echo"}
   if wsClients.Connections != 2 {
     t.Errorf("Setting connections error")
   }
-  if wsClients.target != "ws://localhost:12345/echo" {
+  if wsClients.target != "ws://localhost:5555/echo" {
     t.Errorf("Setting connections error")
   }
 

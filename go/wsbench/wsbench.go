@@ -58,7 +58,7 @@ type WSBench struct {
 func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.Connections; i++ {
     start := time.Nanoseconds()
-    ws, err := websocket.Dial("ws://localhost:12345/echo", "", "http://localhost/")
+    ws, err := websocket.Dial("ws://localhost:5555/echo", "", "http://localhost/")
     if err != nil {
       panic("Dial failed: " + err.String())
     }
