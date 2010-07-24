@@ -1,14 +1,12 @@
 package main
 
 import (
-  // "bytes"
   "fmt"
   "http"
   "io"
-  // "log"
-  // "net"
   "wsbench"
   "websocket"
+  "flag"
 )
 func echoServer(ws *websocket.Conn) { io.Copy(ws, ws) }
 
@@ -20,8 +18,18 @@ func startServer() {
 func main() {
   go startServer()
   var ch = make(chan wsbench.Result)
+
+  var c *int = flag.Int("c", 1, "number of concurrent connections")
+
+  flag.Parse()
+  fmt.Println("c has value ", *c);
   
-  ws := &wsbench.WSBench{Connections:2, Ch: ch}
+  for i := 0; i < flag.NArg(); i++ {
+    fmt.Printf("Flag: %v :", flag.Arg(i))
+  }
+  
+  
+  ws := &wsbench.WSBench{Connections:*c, Ch: ch}
   ws.Run()
   
   fmt.Printf("A: %v :B", ws.Stats)
