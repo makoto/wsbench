@@ -13,6 +13,7 @@ require 'uri'
 require 'json'
 require 'ostruct'
 require 'optparse'
+require 'distribution'
 
 options = OpenStruct.new
 options.connections = 10
@@ -58,11 +59,12 @@ end
 
 def show_result(array)
   oredered_array = array.sort{|a, b| a.time_taken <=> b.time_taken}
-  max = oredered_array.last.time_taken
-  min = oredered_array.first.time_taken
-  sum = array.reduce(0){|total, current| total = total + current.time_taken; total}
-  avg = sum / array.size
-  "sum #{sprintf("%.3f", sum)}, max #{sprintf("%.3f",max)}, min #{sprintf("%.3f",min)}, avg #{sprintf("%.3f", avg)}"
+  # max = oredered_array.last.time_taken
+  # min = oredered_array.first.time_taken
+  # sum = array.reduce(0){|total, current| total = total + current.time_taken; total}
+  # avg = sum / array.size
+  # "sum #{sprintf("%.3f", sum)}, max #{sprintf("%.3f",max)}, min #{sprintf("%.3f",min)}, avg #{sprintf("%.3f", avg)}"
+  Distribution.stats(oredered_array.map{|a| a.time_taken})
 end
 
 results = []
@@ -120,8 +122,8 @@ EM.run {
     
   if results2.size >= connections
     print "SUCCESS (#{results2.size}/#{connections}), "
-    print "Connect: #{show_result(results)} ,"
-    print "Message: #{show_result(results2)}"
+    print "Connect: #{show_result(results).inspect} ,"
+    print "Message: #{show_result(results2).inspect}"
 
     EventMachine::stop
   end
@@ -129,8 +131,8 @@ EM.run {
   
   EventMachine::add_timer(timeout) {
     print "TIMEOUT (#{results2.size} / #{connections}), "
-    print "Connect: #{show_result(results)} ,"
-    print "Message: #{show_result(results2)}"
+    print "Connect: #{show_result(results).inspect} ,"
+    print "Message: #{show_result(results2).inspect}"
 
     EventMachine::stop
   }
