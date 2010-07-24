@@ -44,11 +44,11 @@ type Result struct {
 }
 
 type WSBench struct {
-  connections int
+  Connections int
   target      string
   results     []Result
-  stats       map[string]int64
-  ch          chan Result
+  Stats       map[string]int64
+  Ch          chan Result
 }
 
 // ch1 := make(chan int)
@@ -56,7 +56,7 @@ type WSBench struct {
 
 
 func do_test(w *WSBench, msg []byte) {
-  for i := 0; i < w.connections; i++ {
+  for i := 0; i < w.Connections; i++ {
     start := time.Nanoseconds()
     ws, err := websocket.Dial("ws://localhost:12345/echo", "", "http://localhost/")
     if err != nil {
@@ -80,29 +80,29 @@ func do_test(w *WSBench, msg []byte) {
     ws.Close()
     delta := time.Nanoseconds() - start
     // Adding Dummy result for now.
-    w.ch <- Result{time: delta}
+    w.Ch <- Result{time: delta}
   }
-  close(w.ch)
+  close(w.Ch)
 }
 
 
 func (w *WSBench) Run() {
-  w.results = make([]Result, w.connections)
+  w.results = make([]Result, w.Connections)
   msg := []byte("hello, world!")
 
   go do_test(w, msg)
 
-  for i := 0; i < w.connections; i++ {
-    m := <-w.ch
+  for i := 0; i < w.Connections; i++ {
+    m := <-w.Ch
     fmt.Printf("i: %+v m: %+v", i, m)
     w.results[i] = m
-    if closed(w.ch) {
+    if closed(w.Ch) {
       fmt.Println("Finished 2\n")
       break
     }
   }
 
-  times := make([]int64, w.connections)
+  times := make([]int64, w.Connections)
   for i := range w.results {
     fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
     times[i] = w.results[i].time
@@ -112,7 +112,7 @@ func (w *WSBench) Run() {
 
   var avg int64 = sum(times) / len64
 
-  w.stats = map[string]int64{
+  w.Stats = map[string]int64{
     "sum":   sum(times),
     "avg":   avg,
     "max":   max(times),
