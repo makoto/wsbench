@@ -79,9 +79,10 @@ end
 begin_time = Time.now.to_f
 EM.epoll
 EM.run {
-  i = 0
-  EventMachine::add_periodic_timer(0.0001) do
-    if i < connections 
+  # i = 0
+  # EventMachine::add_periodic_timer(0.0001) do
+  connections.times do |i|
+    # if i < connections 
       start_time = Time.now.to_f
       ws = EventMachine::HttpRequest.new(uri.to_s).get(:timeout => timeout)
       ws.callback(){
@@ -102,8 +103,8 @@ EM.run {
         )
         results2 << result
       }
-      i = i + 1
-    end
+      # i = i + 1
+    # end
   end
 
   EventMachine::add_periodic_timer(1) {
