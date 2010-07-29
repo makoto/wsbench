@@ -8,7 +8,6 @@ import (
   "fmt"
   "time"
   "websocket"
-  "strconv"
 )
 
 func sum(a []int64) int64 { // returns an int
@@ -112,8 +111,10 @@ func (w *WSBench) Run() {
     // fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
     times[i] = w.results[i].time
   }
-  lenS := strconv.Itoa(len(times))
-  len64, _ := strconv.Btoi64(lenS, 10)
+  // lenS := strconv.Itoa(len(times))
+  // len64, _ := strconv.Btoi64(lenS, 10)
+  len64 := int64(len(times))
+  fmt.Printf("result : %v \n", len64)
 
   var avg int64 = sum(times) / len64
 
@@ -123,4 +124,5 @@ func (w *WSBench) Run() {
     "max":   max(times),
     "min":   min(times),
     "count": len64}
+  fmt.Printf("w.stats: %v \n", w.Stats)
 }
