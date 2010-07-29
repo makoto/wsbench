@@ -58,17 +58,22 @@ type WSBench struct {
 func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.Connections; i++ {
     start := time.Nanoseconds()
-    ws, err := websocket.Dial("ws://localhost:5555/echo", "", "http://localhost/")
-    if err != nil {
-      panic("Dial failed: " + err.String())
+    ws, err := websocket.Dial("ws://0.0.0.0:5555/echo", "", "http://0.0.0.0/")
+    if err != nil {      panic("Dial failed: " + err.String())
+
     }
 
     if _, err := ws.Write([]byte(msg)); err != nil {
       panic("Write failed: " + err.String())
     }
 
+    if i % 1000 == 0 {
+      fmt.Println(i)
+    }
+    // fmt.Println(bytes.Equal(response, response))
+
     var response = make([]byte, 512)
-    fmt.Println(bytes.Equal(response, response))
+    // fmt.Println(bytes.Equal(response, response))
     n, err := ws.Read(response)
 
     if err != nil {
@@ -94,7 +99,7 @@ func (w *WSBench) Run() {
 
   for i := 0; i < w.Connections; i++ {
     m := <-w.Ch
-    fmt.Printf("i: %+v m: %+v", i, m)
+    // fmt.Printf("i: %+v m: %+v", i, m)
     w.results[i] = m
     if closed(w.Ch) {
       fmt.Println("Finished 2\n")
@@ -104,7 +109,7 @@ func (w *WSBench) Run() {
 
   times := make([]int64, w.Connections)
   for i := range w.results {
-    fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
+    // fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
     times[i] = w.results[i].time
   }
   lenS := strconv.Itoa(len(times))
