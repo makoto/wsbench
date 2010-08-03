@@ -39,24 +39,14 @@ func pub()  {
 var ch = make(chan int)
 
 func main() {
-  ws1, err := websocket.Dial("ws://127.0.0.1:8080/broadcast", "", "")
-  if err != nil {
-   panic(err)
+  count:=3
+  for i := 0; i < count; i++ {
+    ws1, err := websocket.Dial("ws://127.0.0.1:8080/broadcast", "", "")
+    if err != nil {
+     panic(err)
+    }
+    go sub(ws1)
   }
-  go sub(ws1)
-
-  ws2, err := websocket.Dial("ws://127.0.0.1:8080/broadcast", "", "")
-  if err != nil {
-   panic(err)
-  }
-  go sub(ws2)
-
-  ws3, err := websocket.Dial("ws://127.0.0.1:8080/broadcast", "", "")
-  if err != nil {
-   panic(err)
-  }
-  go sub(ws3)
-
 
   pub()
   l := list.New()
@@ -64,7 +54,11 @@ func main() {
     res := <- ch
     
     l.PushBack(1)
-  	fmt.Printf("%v",l.Len())
     fmt.Println("Received: %v,  %+v", l.Len(), res)
+    
+    if l.Len() >= count {
+      fmt.Println("Got all: %v,  %+v", l.Len(), res)
+      return
+    }
   }
 }
