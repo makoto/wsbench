@@ -58,7 +58,8 @@ func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.Connections; i++ {
     start := time.Nanoseconds()
     ws, err := websocket.Dial("ws://0.0.0.0:5555/echo", "", "http://0.0.0.0/")
-    if err != nil {      panic("Dial failed: " + err.String())
+    if err != nil {
+      panic("Dial failed: " + err.String())
 
     }
 
@@ -66,7 +67,7 @@ func do_test(w *WSBench, msg []byte) {
       panic("Write failed: " + err.String())
     }
 
-    if i % 1000 == 0 {
+    if i%1000 == 0 {
       fmt.Println(i)
     }
     // fmt.Println(bytes.Equal(response, response))
@@ -108,11 +109,9 @@ func (w *WSBench) Run() {
 
   times := make([]int64, w.Connections)
   for i := range w.results {
-    // fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
+    fmt.Printf("i: %v time: %v\n", i, w.results[i].time)
     times[i] = w.results[i].time
   }
-  // lenS := strconv.Itoa(len(times))
-  // len64, _ := strconv.Btoi64(lenS, 10)
   len64 := int64(len(times))
   fmt.Printf("result : %v \n", len64)
 
