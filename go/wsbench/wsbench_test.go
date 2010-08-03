@@ -14,7 +14,10 @@ import (
 
 var serverAddr string
 
-func echoServer(ws *websocket.Conn) { io.Copy(ws, ws) }
+func echoServer(ws *websocket.Conn) { 
+  // fmt.Printf("echoing ws: %v", ws.Protocol)
+  io.Copy(ws, ws) 
+}
 
 func startServer() {
   http.Handle("/echo", websocket.Handler(echoServer))
@@ -24,7 +27,7 @@ func startServer() {
 func TestEcho(t *testing.T) {
   once.Do(startServer)
   msg := []byte("hello, world!")
-  ws, err := websocket.Dial("ws://localhost:5555/echo", "", "http://localhost/")
+  ws, err := websocket.Dial("ws://0.0.0.0:5555/echo", "", "http://0.0.0.0/")
   if err != nil {
     t.Errorf("WebSocket handshake: %v", err)
   }
@@ -47,12 +50,12 @@ func TestEcho(t *testing.T) {
 
 func TestSetClientConnections(t *testing.T) {
   once.Do(startServer)
-  wsClients := &WSBench{Connections: 2, target: "ws://localhost:5555/echo"}
+  wsClients := &WSBench{Connections: 2, target: "ws://0.0.0.0:5555/echo"}
   if wsClients.Connections != 2 {
-    t.Errorf("Setting connections error")
+    t.Errorf("Setting connections ", wsClients.Connections, 2)
   }
-  if wsClients.target != "ws://localhost:5555/echo" {
-    t.Errorf("Setting connections error")
+  if wsClients.target != "ws://0.0.0.0:5555/echo" {
+    t.Errorf("Setting target ", wsClients.target, "ws://0.0.0.0:5555/echo")
   }
 
 }
@@ -99,14 +102,14 @@ func TestStatShouldHaveStat(t *testing.T) {
 
 }
 
-// func TestMoreThan30Connections(t *testing.T) {
-//   var ch = make(chan Result)
-// 
-//   once.Do(startServer)
-//   wsClients := &WSBench{connections: 30, ch: ch}
-//   wsClients.Run()
-//   fmt.Printf("A: %v ", wsClients.results)
-//   if len(wsClients.results) == 30 {
-//     t.Errorf("Running WSBench w 2 connections should return 30 results ", wsClients.results, 30)
-//   }
-// }
+func TestMoreThan30Connections(t *testing.T) {
+  var ch = make(chan Result)
+
+  once.Do(startServer)
+  wsClients := &WSBench{Connections: 30, Ch: ch}
+  wsClients.Run()
+  // fmt.Printf("A: %v ", wsClients.results)
+  if len(wsClients.results) < 30 {
+    t.Errorf("Running WSBench w 2 connections should return 30 results ", len(wsClients.results), 30)
+  }
+}
