@@ -48,6 +48,7 @@ type WSBench struct {
   results     []Result
   Stats       map[string]int64
   Ch          chan Result
+  Type        string
 }
 
 // ch1 := make(chan int)
@@ -57,10 +58,16 @@ type WSBench struct {
 func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.Connections; i++ {
     start := time.Nanoseconds()
-    ws, err := websocket.Dial("ws://0.0.0.0:5555/echo", "", "http://0.0.0.0/")
+    fmt.Printf("Type: %v", w.Type)
+    var path string
+    if w.Type == "broadcast" {
+      path = w.Type
+    } else {
+      path = "echo"
+    }
+    ws, err := websocket.Dial("ws://0.0.0.0:5555/"+path, "", "http://0.0.0.0/")
     if err != nil {
       panic("Dial failed: " + err.String())
-
     }
 
     if _, err := ws.Write([]byte(msg)); err != nil {
