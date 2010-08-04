@@ -164,14 +164,14 @@ func TestMoreThan30Connections(t *testing.T) {
   }
 }
 
-func TestBroadcast(t *testing.T) {
-  var ch = make(chan Result)
-
-  once.Do(startServer)
-  wsClients := &WSBench{Connections: 2, Ch: ch, Type: "broadcast"}
-  wsClients.Run()
-  // fmt.Printf("A: %v ", wsClients.results)
-  if len(wsClients.results) < 2 {
-    t.Errorf("Running WSBench w 2 connections should return 2 results ", len(wsClients.results), 2)
-  }
-}
+// func TestBroadcast(t *testing.T) {
+//   var ch = make(chan Result)
+// 
+//   once.Do(startServer)
+//   wsClients := &WSBench{Connections: 2, Ch: ch, Type: "broadcast"}
+//   wsClients.Run()
+//   // fmt.Printf("A: %v ", wsClients.results)
+//   if len(wsClients.results) < 2 {
+//     t.Errorf("Running WSBench w 2 connections should return 2 results ", len(wsClients.results), 2)
+//   }
+// }
