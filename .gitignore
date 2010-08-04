@@ -1,0 +1,10 @@
+go/wsbench/_*
+go/wsbench/*8
+go/wsbench/*6
+go/*8
+go/*6
+go/broadcast_client
+go/broadcast_server
+go/chat_client
+go/chat_server
+go/ws_client
