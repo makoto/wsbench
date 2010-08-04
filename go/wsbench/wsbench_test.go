@@ -154,13 +154,14 @@ func TestStatShouldHaveStat(t *testing.T) {
 
 func TestMoreThan30Connections(t *testing.T) {
   var ch = make(chan Result)
+  num:=1000000
 
   once.Do(startServer)
-  wsClients := &WSBench{Connections: 30, Ch: ch}
+  wsClients := &WSBench{Connections: num, Ch: ch}
   wsClients.Run()
   // fmt.Printf("A: %v ", wsClients.results)
-  if len(wsClients.results) < 30 {
-    t.Errorf("Running WSBench w 2 connections should return 30 results ", len(wsClients.results), 30)
+  if len(wsClients.results) < num {
+    t.Errorf("Running WSBench w 2 connections should return 30 results ", len(wsClients.results), num)
   }
 }
 
