@@ -16,7 +16,7 @@ func startServer() {
 }
 
 func main() {
-  go startServer()
+  // go startServer()
   var ch = make(chan wsbench.Result)
 
   var c *int = flag.Int("c", 1, "number of concurrent connections")
@@ -29,7 +29,7 @@ func main() {
   }
   
   
-  ws := &wsbench.WSBench{Connections:*c, Ch: ch}
+  ws := &wsbench.WSBench{Connections:*c, Ch: ch, Type:"echo"}
   ws.Run()
   
   fmt.Printf("A: %v :B", ws.Stats)
