@@ -58,7 +58,6 @@ type WSBench struct {
 func do_test(w *WSBench, msg []byte) {
   for i := 0; i < w.Connections; i++ {
     start := time.Nanoseconds()
-    fmt.Printf("Type: %v", w.Type)
     var path string
     if w.Type == "broadcast" {
       path = w.Type
