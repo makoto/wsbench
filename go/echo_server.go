@@ -14,8 +14,8 @@ func EchoServer(ws *websocket.Conn) {
 }
 
 func main() {
-	http.Handle("/echo", websocket.Handler(EchoServer));
-	err := http.ListenAndServe(":5555", nil);
+  http.Handle("/echo", websocket.Handler(EchoServer));
+	err := http.ListenAndServe(":8080", nil);
 	if err != nil {
 		panic("ListenAndServe: " + err.String())
 	}
