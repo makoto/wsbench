@@ -60,7 +60,7 @@ var httpServer = http.createServer(serveFile);
 
 
 var server = ws.createServer({
-  debug: true,
+  debug: false,
   version: "draft75"
 }, httpServer);
 
@@ -70,12 +70,13 @@ server.addListener("listening", function(){
 
 // Handle WebSocket Requests
 server.addListener("connection", function(conn){
-  log("opened connection: "+conn.id);
+  // log("opened connection: "+conn.id);
   
-  server.send(conn.id, "Connected as: "+conn.id);
   conn.addListener("message", function(message){
     log("<"+conn.id+"> "+message);
     conn.broadcast(message);
+    // Sending to myself
+    server.send(conn.id, message);
   });
 });
 
