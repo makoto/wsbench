@@ -1,0 +1,15 @@
+# Comparing with node.js in separate machine
+
+# broadcast-server.js
+SUCCESS (5000/5000), Connect: {:sd=>0.024, :mean=>0.014, :count=>5000.0, :min=>0.003, :max=>0.213, :sum=>68.927} ,Message: {:sd=>0.332, :mean=>0.488, :count=>5000.0, :min=>0.003, :max=>1.115, :sum=>2439.04}, Total 18.744 
+SUCCESS (10000/10000), Connect: {:sd=>0.041, :mean=>0.021, :count=>10000.0, :min=>0.003, :max=>0.419, :sum=>206.0} ,Message: {:sd=>0.85, :mean=>1.368, :count=>10000.0, :min=>0.029, :max=>2.523, :sum=>13682.259}, Total 51.594 
+SUCCESS (15000/15000), Connect: {:sd=>0.056, :mean=>0.025, :count=>15000.0, :min=>0.003, :max=>0.902, :sum=>379.975} ,Message: {:sd=>3.339, :mean=>4.02, :count=>15000.0, :min=>0.002, :max=>10.689, :sum=>60303.724}, Total 97.415 
+SUCCESS (20000/20000), Connect: {:sd=>0.053, :mean=>0.028, :count=>20000.0, :min=>0.003, :max=>0.833, :sum=>553.967} ,Message: {:sd=>10.58, :mean=>13.509, :count=>20000.0, :min=>0.003, :max=>34.662, :sum=>270187.784}, Total 178.244 
+
+# echo-server.js
+
+SUCCESS (5000/5000), Connect: {:sd=>0.025, :mean=>0.016, :count=>5000.0, :min=>0.003, :max=>0.238, :sum=>77.83} ,Message: {:sd=>0.018, :mean=>0.008, :count=>5000.0, :min=>0.001, :max=>0.211, :sum=>40.59}, Total 20.226 
+SUCCESS (10000/10000), Connect: {:sd=>0.051, :mean=>0.023, :count=>10000.0, :min=>0.003, :max=>3.077, :sum=>231.47} ,Message: {:sd=>0.024, :mean=>0.011, :count=>10000.0, :min=>0.002, :max=>0.359, :sum=>105.092}, Total 53.629 
+SUCCESS (15000/15000), Connect: {:sd=>0.049, :mean=>0.027, :count=>15000.0, :min=>0.003, :max=>0.616, :sum=>398.858} ,Message: {:sd=>0.03, :mean=>0.012, :count=>15000.0, :min=>0.002, :max=>0.578, :sum=>184.559}, Total 100.012 
+SUCCESS (20000/20000), Connect: {:sd=>0.085, :mean=>0.036, :count=>20000.0, :min=>0.003, :max=>3.043, :sum=>728.682} ,Message: {:sd=>0.062, :mean=>0.019, :count=>20000.0, :min=>0.002, :max=>1.275, :sum=>378.269}, Total 165.796 
+
